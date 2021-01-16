@@ -68,7 +68,16 @@ public class ControllerTest {
                 .andExpect(jsonPath("$.director").value("Joss Whedon"))
                 .andExpect(jsonPath("$.actors").value("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth"))
                 .andExpect(jsonPath("$.release").value("2012"))
-                .andExpect(jsonPath("$.description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
-                ;
+                .andExpect(jsonPath("$.description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."));
+    }
+
+    @Test
+    public void getMovieByTitle_returnsFriendlyMessage_ifMovieDoesntExist() throws Exception {
+
+        when(mockMovieService.findByTitle("Sunshine Central")).thenReturn(null);
+
+        mockMvc.perform(get("/api/movies/Sunshine Central"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value("Movie with this title does not exist"));
     }
 }
