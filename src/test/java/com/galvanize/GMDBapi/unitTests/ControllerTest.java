@@ -2,6 +2,8 @@ package com.galvanize.GMDBapi.unitTests;
 
 import com.galvanize.GMDBapi.model.Movie;
 import com.galvanize.GMDBapi.repository.MovieRepository;
+import com.galvanize.GMDBapi.service.MovieService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,25 +26,24 @@ public class ControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    MovieRepository movieRepository;
+    MovieService mockMovieService;
 
+    List<Movie> movies;
+    Movie movie;
 
-
+    @BeforeEach
+    public void setup(){
+        movie = new Movie();
+        movie.setTitle("The Avengers");
+    }
 
     @Test
     public void getAllMovies_returnsMovieList() throws Exception {
-
-        //Arrange
-        List<Movie> movies = new ArrayList<Movie>();
-        Movie movie = new Movie();
-        movie.setTitle("The Avengers");
+        movies = new ArrayList<Movie>();
         movies.add(movie);
 
-        //act
-        when(movieRepository.findAll()).thenReturn(movies);
+        when(mockMovieService.getAllMovies()).thenReturn(movies);
 
-
-        //assert
         mockMvc.perform(get("/api/movies"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists()) //$ represents json to be return
