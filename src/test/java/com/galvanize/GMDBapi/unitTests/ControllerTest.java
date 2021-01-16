@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -35,6 +37,11 @@ public class ControllerTest {
     public void setup(){
         movie = new Movie();
         movie.setTitle("The Avengers");
+        movie.setDirector("Joss Whedon");
+        movie.setActors("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth");
+        movie.setRelease("2012");
+        movie.setDescription("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.");
+        //movie.setRating(null);
     }
 
     @Test
@@ -49,5 +56,19 @@ public class ControllerTest {
                 .andExpect(jsonPath("$").exists()) //$ represents json to be return
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$.[0].title").value("The Avengers"));
+    }
+
+    @Test
+    public void getMovieByTitle_returnsMovie() throws Exception {
+        when(mockMovieService.findByTitle("The Avengers")).thenReturn(movie);
+
+        mockMvc.perform(get("/api/movies/The Avengers"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("The Avengers"))
+                .andExpect(jsonPath("$.director").value("Joss Whedon"))
+                .andExpect(jsonPath("$.actors").value("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth"))
+                .andExpect(jsonPath("$.release").value("2012"))
+                .andExpect(jsonPath("$.description").value("Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."))
+                ;
     }
 }

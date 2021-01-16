@@ -5,6 +5,7 @@ import com.galvanize.GMDBapi.repository.MovieRepository;
 import com.galvanize.GMDBapi.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -20,4 +21,10 @@ public class MovieController {
     public List<Movie> getAllMovies(){
         return movieService.getAllMovies();
     }
+
+    @GetMapping("/api/movies/{title}")
+    public Movie getMovieByTitle(@PathVariable String title){
+        return movieService.findByTitle(title);
+    }
+
 }

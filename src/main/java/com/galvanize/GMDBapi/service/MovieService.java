@@ -18,4 +18,8 @@ public class MovieService {
     public List<Movie> getAllMovies(){
         return movieRepository.findAll();
     }
+
+    public Movie findByTitle(String title) {
+        return null;
+    }
 }
