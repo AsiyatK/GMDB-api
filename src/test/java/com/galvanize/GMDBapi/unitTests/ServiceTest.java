@@ -20,6 +20,7 @@ public class ServiceTest {
     private MovieRepository mockMovieRepository;
     List<Movie> movies;
     Movie movie;
+    List<String> reviews;
 
     @BeforeEach
     public void setup(){
@@ -74,21 +75,58 @@ public class ServiceTest {
 
     @Test
     public void updateMovieRatingsTest(){
-        movie.setRating("5");
+        when(mockMovieRepository.findByTitle(any())).thenReturn(movie);
 
-        when(mockMovieRepository.save(any())).thenReturn(movie);
-        Movie fromService = movieService.updateMovieRatings(movie);
-        assertEquals("5 (Your Rating: 5)",fromService.getRating());
+        Movie avengerReview1 = new Movie();
+        avengerReview1.setTitle("The Avengers");
+        avengerReview1.setRating("5");
 
-        movie.setRating("3");
+        Movie fromService = movieService.updateMovieRatings(avengerReview1);
+        assertEquals("5",fromService.getRating());
 
-        when(mockMovieRepository.save(any())).thenReturn(movie);
-        fromService = movieService.updateMovieRatings(movie);
-        assertEquals("4 (Your Rating: 3)",fromService.getRating());
+        when(mockMovieRepository.findByTitle(any())).thenReturn(fromService);
 
+        Movie avengerReview2 = new Movie();
+        avengerReview2.setTitle("The Avengers");
+        avengerReview2.setRating("3");
+
+        Movie fromService2 = movieService.updateMovieRatings(avengerReview2);
+        assertEquals("4",fromService2.getRating());
 
     }
 
+    @Test
+    public void updateMovieReviewsTest() {
+        reviews = new ArrayList<>();
+
+        when(mockMovieRepository.findByTitle(any())).thenReturn(movie);
+
+        Movie avengerReview1 = new Movie();
+        reviews.add("liked!!");
+        avengerReview1.setTitle("The Avengers");
+        avengerReview1.setReviews(reviews);
+        avengerReview1.setRating("5");
+
+        Movie fromService = movieService.updateMovieReviews(avengerReview1);
+        assertEquals(1, fromService.getReviews().size());
+        assertEquals("5", fromService.getRating());
+
+        reviews.clear();
+
+        when(mockMovieRepository.findByTitle(any())).thenReturn(fromService);
+
+        Movie avengerReview2 = new Movie();
+        reviews.add("Really Cool movie!!");
+        avengerReview2.setTitle("The Avengers");
+        avengerReview2.setReviews(reviews);
+        avengerReview2.setRating("3");
+
+        Movie fromService2 = movieService.updateMovieReviews(avengerReview2);
+
+        assertEquals(2, fromService2.getReviews().size());
+        assertEquals("4",fromService2.getRating());
+
+    }
 
 
 }

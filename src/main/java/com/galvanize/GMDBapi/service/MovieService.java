@@ -24,20 +24,36 @@ public class MovieService {
     }
 
     public Movie updateMovieRatings(Movie movie) {
-        int yourRating = Integer.parseInt(movie.getRating());
-        List movieRatingList = movie.getRatings();
-        movieRatingList.add(yourRating);
-        movie.setRatings(movieRatingList);
+        Movie fromDatabase = movieRepository.findByTitle(movie.getTitle());
 
-        int avgRating =  movie.getRatings().stream().mapToInt(Integer::intValue).sum()/movie.getRatings().size();
-        movie.setRating(String.valueOf(yourRating)); //Average Ratings
+        int avgRating = getAvgRatingValue(movie, fromDatabase);
+        fromDatabase.setRating(String.valueOf(avgRating)); //Average Ratings
         movieRepository.save(movie);
 
-        movie.setRating(avgRating +" (Your Rating: " + yourRating+")"); //User custom Message
-        return movie;
+        return fromDatabase;
     }
 
     public Movie updateMovieReviews(Movie movie) {
-        return null;
+        Movie fromDatabase = movieRepository.findByTitle(movie.getTitle());
+
+        int avgRating = getAvgRatingValue(movie, fromDatabase);
+        fromDatabase.setRating(String.valueOf(avgRating)); //Average Ratings
+
+        // Add Review to the List in the Movie Object
+        List<String> movieReviewList = fromDatabase.getReviews();
+        movieReviewList.addAll(movie.getReviews());
+        fromDatabase.setReviews(movieReviewList);
+
+        movieRepository.save(fromDatabase); //save
+
+        return fromDatabase;
+    }
+
+    private Integer getAvgRatingValue(Movie inputMovie, Movie movieFromDatabase) {
+        Integer yourRating = Integer.parseInt(inputMovie.getRating());
+        List<Integer> movieRatingList = movieFromDatabase.getRatings();
+        movieRatingList.add(yourRating);
+        movieFromDatabase.setRatings(movieRatingList);
+        return movieFromDatabase.getRatings().stream().mapToInt(Integer::intValue).sum()/movieFromDatabase.getRatings().size();
     }
 }

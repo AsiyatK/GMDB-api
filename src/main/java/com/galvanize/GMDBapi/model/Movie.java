@@ -22,7 +22,7 @@ public class Movie {
 
 
     private List<Integer> ratings = new ArrayList<>();
-    private List<String> reviews;
+    private List<String> reviews = new ArrayList<>();
 
 
 

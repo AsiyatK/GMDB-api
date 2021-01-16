@@ -89,24 +89,24 @@ public class ControllerTest {
     @Test
     public void rateMovieByTitle_returnsMovieObjectwithRating() throws  Exception{
         //Acceptance Criteria - 3a
-        movie.setRating("5 (Your Rating: 5)");
+        movie.setRating("5");
         when(mockMovieService.updateMovieRatings(any())).thenReturn(movie);
 
         mockMvc.perform(put("/api/movies/rate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(movie)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.rating").value("5 (Your Rating: 5)"));
+                .andExpect(jsonPath("$.rating").value("5"));
 
         //Acceptance Criteria - 3b
-        movie.setRating("4 (Your Rating: 3)");
+        movie.setRating("4");
         when(mockMovieService.updateMovieRatings(any())).thenReturn(movie);
 
         mockMvc.perform(put("/api/movies/rate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(movie)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.rating").value("4 (Your Rating: 3)"));
+                .andExpect(jsonPath("$.rating").value("4"));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class ControllerTest {
         reviews.add("Really Cool movie!!");
         reviews.add("liked!!");
         movie.setReviews(reviews);
-        movie.setRating("5 (Your Rating: 5)");
+        movie.setRating("5");
 
         when(mockMovieService.updateMovieReviews(any())).thenReturn(movie);
 
@@ -125,7 +125,7 @@ public class ControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.reviews.length()").value(2))
                 .andExpect(jsonPath("$.reviews.[1]").value("liked!!"))
-                .andExpect(jsonPath("$.rating").value("5 (Your Rating: 5)"));
+                .andExpect(jsonPath("$.rating").value("5"));
     }
 
     @Test
