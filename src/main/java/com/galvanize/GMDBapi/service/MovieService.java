@@ -28,7 +28,7 @@ public class MovieService {
 
         int avgRating = getAvgRatingValue(movie, fromDatabase);
         fromDatabase.setRating(String.valueOf(avgRating)); //Average Ratings
-        movieRepository.save(movie);
+        movieRepository.save(fromDatabase);
 
         return fromDatabase;
     }

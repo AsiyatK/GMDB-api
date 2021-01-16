@@ -72,26 +72,54 @@ public class IntegrationTest {
                 .content(mapper.writeValueAsString(avengerReview1)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rating").value("5"));
+
+        Movie avengerReview2 = new Movie();
+        avengerReview2.setTitle("The Avengers");
+        avengerReview2.setRating("3");
+
+        mockMvc.perform(put("/api/movies/rate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(avengerReview2)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rating").value("4"));
+
     }
 
 
     @Test
     public void submitReviewAndRatingTest() throws Exception{
-
-
         List<String> reviews = new ArrayList<>();
 
-
-        Movie avengerReview1 = new Movie();
+        Movie superManReview1 = new Movie();
         reviews.add("liked!!");
-        avengerReview1.setTitle("The Avengers");
-        avengerReview1.setReviews(reviews);
-        avengerReview1.setRating("5");
+        superManReview1.setTitle("Superman Returns");
+        superManReview1.setReviews(reviews);
+        superManReview1.setRating("5");
 
         mockMvc.perform(put("/api/movies/review")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(avengerReview1)))
-                .andExpect(status().isOk());
+                .content(mapper.writeValueAsString(superManReview1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.reviews.length()").value(1))
+                .andExpect(jsonPath("$.reviews.[0]").value("liked!!"))
+                .andExpect(jsonPath("$.rating").value("5"));;
+
+        reviews.clear();
+
+        Movie superManReview2 = new Movie();
+        reviews.add("Really Cool movie!!");
+        superManReview2.setTitle("Superman Returns");
+        superManReview2.setReviews(reviews);
+        superManReview2.setRating("3");
+
+        mockMvc.perform(put("/api/movies/review")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(superManReview2)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.reviews.length()").value(2))
+                .andExpect(jsonPath("$.reviews.[0]").value("liked!!"))
+                .andExpect(jsonPath("$.reviews.[1]").value("Really Cool movie!!"))
+                .andExpect(jsonPath("$.rating").value("4"));;
 
     }
 
