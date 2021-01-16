@@ -13,9 +13,9 @@ public class Movie {
     private String release;
     private String description;
     private String rating;
-    @Lob
+    @ElementCollection
     private List<Integer> ratings = new ArrayList<>();
-    @Lob
+    @ElementCollection
     private List<String> reviews = new ArrayList<>();
 
     public String getTitle() {
