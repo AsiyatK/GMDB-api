@@ -20,7 +20,7 @@ public class MovieService {
     }
 
     public Movie findByTitle(String title) {
-        return null;
+        return movieRepository.findByTitle(title);
     }
 
     public Movie updateMovieRatings(Movie movie) {

@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 public class ServiceTest {
     private MovieService movieService;
@@ -50,6 +52,24 @@ public class ServiceTest {
         List<Movie> actualMovies = movieService.getAllMovies();
         assertEquals(movies, actualMovies);
         assertEquals(2, actualMovies.size());
+    }
+
+    @Test
+    public void findByTitle_returnsMovieWithGivenTitle(){
+
+        when(mockMovieRepository.findByTitle(any())).thenReturn(movie);
+
+        Movie fromService = movieService.findByTitle(movie.getTitle());
+        assertEquals(movie, fromService);
+    }
+
+    @Test
+    public void findByNonExistentTitle_returnsNull(){
+        when(mockMovieRepository.findByTitle("hello")).thenReturn(null);
+
+        Movie fromService = movieService.findByTitle("Hello");
+        assertNull(fromService);
+
     }
 
 }
