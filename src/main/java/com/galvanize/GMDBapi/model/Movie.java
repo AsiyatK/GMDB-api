@@ -18,7 +18,12 @@ public class Movie {
     private String release;
     private String description;
     private String rating;
+
+
+
+    private List<Integer> ratings = new ArrayList<>();
     private List<String> reviews;
+
 
 
     public int getId() {
@@ -84,4 +89,16 @@ public class Movie {
     public void setReviews(List<String> reviews) {
         this.reviews = reviews;
     }
+
+    public List<Integer> getRatings() {
+
+        return ratings;
+    }
+
+    public void setRatings(List<Integer> ratings) {
+        this.ratings = ratings;
+    }
+
+
+
 }

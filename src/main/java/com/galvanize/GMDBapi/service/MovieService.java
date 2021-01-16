@@ -24,7 +24,17 @@ public class MovieService {
     }
 
     public Movie updateMovieRatings(Movie movie) {
-        return null;
+        int yourRating = Integer.parseInt(movie.getRating());
+        List movieRatingList = movie.getRatings();
+        movieRatingList.add(yourRating);
+        movie.setRatings(movieRatingList);
+
+        int avgRating =  movie.getRatings().stream().mapToInt(Integer::intValue).sum()/movie.getRatings().size();
+        movie.setRating(String.valueOf(yourRating)); //Average Ratings
+        movieRepository.save(movie);
+
+        movie.setRating(avgRating +" (Your Rating: " + yourRating+")"); //User custom Message
+        return movie;
     }
 
     public Movie updateMovieReviews(Movie movie) {

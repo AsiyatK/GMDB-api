@@ -72,4 +72,23 @@ public class ServiceTest {
 
     }
 
+    @Test
+    public void updateMovieRatingsTest(){
+        movie.setRating("5");
+
+        when(mockMovieRepository.save(any())).thenReturn(movie);
+        Movie fromService = movieService.updateMovieRatings(movie);
+        assertEquals("5 (Your Rating: 5)",fromService.getRating());
+
+        movie.setRating("3");
+
+        when(mockMovieRepository.save(any())).thenReturn(movie);
+        fromService = movieService.updateMovieRatings(movie);
+        assertEquals("4 (Your Rating: 3)",fromService.getRating());
+
+
+    }
+
+
+
 }
