@@ -1,38 +1,22 @@
 package com.galvanize.GMDBapi.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Movie {
     @Id
-    @GeneratedValue
-
-    private int id;
     private String title;
     private String director;
     private String actors;
     private String release;
     private String description;
     private String rating;
-
-
-
+    @Lob
     private List<Integer> ratings = new ArrayList<>();
+    @Lob
     private List<String> reviews = new ArrayList<>();
-
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
