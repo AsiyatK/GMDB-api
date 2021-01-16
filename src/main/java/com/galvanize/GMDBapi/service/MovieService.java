@@ -24,4 +24,7 @@ public class MovieService {
         return null;
     }
 
+    public Movie updateMovieRatings(Movie movie) {
+        return null;
+    }
 }

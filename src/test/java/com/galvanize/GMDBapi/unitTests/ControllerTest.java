@@ -1,22 +1,23 @@
 package com.galvanize.GMDBapi.unitTests;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galvanize.GMDBapi.model.Movie;
-import com.galvanize.GMDBapi.repository.MovieRepository;
 import com.galvanize.GMDBapi.service.MovieService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +30,9 @@ public class ControllerTest {
 
     @MockBean
     MovieService mockMovieService;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     List<Movie> movies;
     Movie movie;
@@ -46,7 +50,7 @@ public class ControllerTest {
 
     @Test
     public void getAllMovies_returnsMovieList() throws Exception {
-        movies = new ArrayList<Movie>();
+        movies = new ArrayList<>();
         movies.add(movie);
 
         when(mockMovieService.getAllMovies()).thenReturn(movies);
@@ -79,5 +83,29 @@ public class ControllerTest {
         mockMvc.perform(get("/api/movies/Sunshine Central"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value("Movie with this title does not exist"));
+    }
+
+    @Test
+    public void rateMovieByTitle_returnsMovieObjectwithRating() throws  Exception{
+        //Acceptance Criteria - 3a
+        movie.setRating("5 (Your Rating: 5)");
+        when(mockMovieService.updateMovieRatings(any())).thenReturn(movie);
+
+        mockMvc.perform(put("/api/movies/rate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(movie)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rating").value("5 (Your Rating: 5)"));
+
+        //Acceptance Criteria - 3b
+        movie.setRating("4 (Your Rating: 3)");
+        when(mockMovieService.updateMovieRatings(any())).thenReturn(movie);
+
+        mockMvc.perform(put("/api/movies/rate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(movie)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rating").value("4 (Your Rating: 3)"));
+
     }
 }
