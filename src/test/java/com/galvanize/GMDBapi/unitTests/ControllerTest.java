@@ -36,6 +36,7 @@ public class ControllerTest {
 
     List<Movie> movies;
     Movie movie;
+    List<String> reviews;
 
     @BeforeEach
     public void setup(){
@@ -106,6 +107,24 @@ public class ControllerTest {
                 .content(mapper.writeValueAsString(movie)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rating").value("4 (Your Rating: 3)"));
+    }
 
+    @Test
+    public void submitTextReview_returnsMovieObjectWithReview() throws Exception {
+        reviews = new ArrayList<>();
+        reviews.add("Really Cool movie!!");
+        reviews.add("liked!!");
+        movie.setReviews(reviews);
+        movie.setRating("5 (Your Rating: 5)");
+
+        when(mockMovieService.updateMovieReviews(any())).thenReturn(movie);
+
+        mockMvc.perform(put("/api/movies/review")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(movie)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.reviews.length()").value(2))
+                .andExpect(jsonPath("$.reviews.[1]").value("liked!!"))
+                .andExpect(jsonPath("$.rating").value("5 (Your Rating: 5)"));
     }
 }

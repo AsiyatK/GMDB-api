@@ -3,6 +3,8 @@ package com.galvanize.GMDBapi.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Movie {
@@ -16,6 +18,7 @@ public class Movie {
     private String release;
     private String description;
     private String rating;
+    private List<String> reviews;
 
 
     public int getId() {
@@ -72,5 +75,13 @@ public class Movie {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public List<String> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<String> reviews) {
+        this.reviews = reviews;
     }
 }

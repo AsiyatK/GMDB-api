@@ -42,6 +42,13 @@ public class MovieController {
         return movieService.updateMovieRatings(movie);
     }
 
+    @PutMapping("/api/movies/review")
+    public Movie updateMovieReviews(@RequestBody Movie movie){
+        return movieService.updateMovieReviews(movie);
+    }
+
+
+
     private String buildResponseEntity() throws JsonProcessingException {
         //forming json to return in the response;
         ObjectMapper mapper = new ObjectMapper();
@@ -49,6 +56,5 @@ public class MovieController {
         incorrectTitle.put("status", "Movie with this title does not exist");
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(incorrectTitle);
     }
-
 
 }
