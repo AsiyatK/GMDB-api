@@ -13,8 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,7 +48,7 @@ public class IntegrationTest {
                 .andExpect(jsonPath("$.actors").value("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth"))
                 .andExpect(jsonPath("$.release").value("2012"))
                 .andExpect(jsonPath("$.description").value("Earths mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."));
-        ;
+
     }
 
     @Test
@@ -58,7 +56,7 @@ public class IntegrationTest {
         mockMvc.perform(get("/api/movies/Avengers"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value("Movie with this title does not exist"));
-        ;
+
     }
 
     @Test
@@ -102,7 +100,7 @@ public class IntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.reviews.length()").value(1))
                 .andExpect(jsonPath("$.reviews.[0]").value("liked!!"))
-                .andExpect(jsonPath("$.rating").value("5"));;
+                .andExpect(jsonPath("$.rating").value("5"));
 
         reviews.clear();
 
@@ -119,7 +117,7 @@ public class IntegrationTest {
                 .andExpect(jsonPath("$.reviews.length()").value(2))
                 .andExpect(jsonPath("$.reviews.[0]").value("liked!!"))
                 .andExpect(jsonPath("$.reviews.[1]").value("Really Cool movie!!"))
-                .andExpect(jsonPath("$.rating").value("4"));;
+                .andExpect(jsonPath("$.rating").value("4"));
 
     }
 
