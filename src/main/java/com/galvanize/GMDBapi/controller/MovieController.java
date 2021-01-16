@@ -30,19 +30,22 @@ public class MovieController {
     @GetMapping("/api/movies/{title}")
     public ResponseEntity<Object> getMovieByTitle(@PathVariable String title) throws JsonProcessingException {
 
-        //forming json to return in the response;
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode incorrectTitle = mapper.createObjectNode();
-        incorrectTitle.put("status", "Movie with this title does not exist");
-        String incorrectTitleJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(incorrectTitle);
-
         Movie movie = movieService.findByTitle(title);
         if(movie != null){
             return new ResponseEntity<>(movie, HttpStatus.OK);
         }
        else {
-           return new ResponseEntity<>(incorrectTitleJson, HttpStatus.NOT_FOUND);
+           return new ResponseEntity<>(this.buildResponseEntity(), HttpStatus.NOT_FOUND);
         }
     }
+
+    private String buildResponseEntity() throws JsonProcessingException {
+        //forming json to return in the response;
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode incorrectTitle = mapper.createObjectNode();
+        incorrectTitle.put("status", "Movie with this title does not exist");
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(incorrectTitle);
+    }
+
 
 }
