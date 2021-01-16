@@ -33,7 +33,7 @@ public class MovieController {
             return new ResponseEntity<>(movie, HttpStatus.OK);
         }
        else {
-           return new ResponseEntity<>(this.buildResponseEntity(), HttpStatus.NOT_FOUND);
+           return new ResponseEntity<>(this.buildResponseEntity("Movie with this title does not exist"), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -43,17 +43,19 @@ public class MovieController {
     }
 
     @PutMapping("/api/movies/review")
-    public Movie updateMovieReviews(@RequestBody Movie movie){
-        return movieService.updateMovieReviews(movie);
+    public ResponseEntity<Object> updateMovieReviews(@RequestBody Movie movie) throws JsonProcessingException {
+        if(movie.getRating()==null)
+            return new ResponseEntity<>(this.buildResponseEntity("Please Submit the Ratings along with the Review"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(movieService.updateMovieReviews(movie), HttpStatus.OK);
     }
 
 
 
-    private String buildResponseEntity() throws JsonProcessingException {
+    private String buildResponseEntity(String message) throws JsonProcessingException {
         //forming json to return in the response;
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode incorrectTitle = mapper.createObjectNode();
-        incorrectTitle.put("status", "Movie with this title does not exist");
+        incorrectTitle.put("status", message);
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(incorrectTitle);
     }
 

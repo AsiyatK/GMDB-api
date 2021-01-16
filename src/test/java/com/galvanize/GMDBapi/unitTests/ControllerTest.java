@@ -127,4 +127,22 @@ public class ControllerTest {
                 .andExpect(jsonPath("$.reviews.[1]").value("liked!!"))
                 .andExpect(jsonPath("$.rating").value("5 (Your Rating: 5)"));
     }
+
+    @Test
+    public void submitTextReviewWithoutRating_returnsFriendlyMessage() throws Exception {
+        reviews = new ArrayList<>();
+        reviews.add("Really Cool movie!!");
+        reviews.add("liked!!");
+        movie.setReviews(reviews);
+
+
+        when(mockMovieService.updateMovieReviews(any())).thenReturn(movie);
+
+        mockMvc.perform(put("/api/movies/review")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(movie)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value("Please Submit the Ratings along with the Review"))
+                ;
+    }
 }

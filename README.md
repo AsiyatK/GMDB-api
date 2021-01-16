@@ -53,7 +53,8 @@ Then I receive a friendly message that a star rating is required.
 |-----|----------------|:------------|------------:|
 |/api/movies|GET|Get all the Movies from the GMDB| 200|
 |/api/movies/{title}|GET|Get Movie by Title|200|
-|/api/movies/rate|PUT|Update and return the Movie Object|200|
+|/api/movies/rate|PUT|Update and return the Movie Object with ratings|200|
+|/api/movies/review|PUT|Update and return the Movie Object with Review|200|
 
 ### **Sample Request and Response**
 GET /api/movies
@@ -110,7 +111,39 @@ Response
     "actors": "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth",
     "release": "2012",
     "description": "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.",
-    "rating": 5
+    "rating": "5 (Your Rating: 5)"
+  }
+````
+
+PUT /api/movies/review
+
+Request
+````
+  {
+    "title": "The Avengers",
+    "director": "Joss Whedon",
+    "actors": "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth",
+    "release": "2012",
+    "description": "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.",
+    "rating": "5"
+    "reviews":[
+        "liked!!"
+    ]
+  }
+````
+Response
+````
+  {
+    "title": "The Avengers",
+    "director": "Joss Whedon",
+    "actors": "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth",
+    "release": "2012",
+    "description": "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.",
+    "rating": "5 (Your Rating: 5)",
+    "reviews":[
+        "Really Cool movie!!", 
+        "liked!!"
+    ]
   }
 ````
 
