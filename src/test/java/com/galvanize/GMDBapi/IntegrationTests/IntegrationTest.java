@@ -29,5 +29,24 @@ public class IntegrationTest {
                 .andExpect(jsonPath("$.[2].title").value("Steel"));
     }
 
+    @Test
+    public void getMovieByTitleTest() throws Exception{
+        mockMvc.perform(get("/api/movies/The Avengers"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("The Avengers"))
+                .andExpect(jsonPath("$.director").value("Joss Whedon"))
+                .andExpect(jsonPath("$.actors").value("Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth"))
+                .andExpect(jsonPath("$.release").value("2012"))
+                .andExpect(jsonPath("$.description").value("Earths mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity."));
+        ;
+    }
+
+    @Test
+    public void getMovieByIncorrectTitleTest() throws Exception{
+        mockMvc.perform(get("/api/movies/Avengers"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value("Movie with this title does not exist"));
+        ;
+    }
 
 }
